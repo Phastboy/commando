@@ -3,7 +3,7 @@ name = "commando"
 version = "0.0.0"
 edition = "2021"
 description = "A CLI tool that help you write conventional commit messages interactively."
-license = "GNU General Public License v3.0"
+license = "GPL-3.0"
 author = "phastboy"
 
 [dependencies]
