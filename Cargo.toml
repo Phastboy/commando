@@ -4,7 +4,12 @@ version = "0.0.0"
 edition = "2021"
 description = "A CLI tool that help you write conventional commit messages interactively."
 license = "GPL-3.0"
-author = "phastboy"
+authors = ["phastboy stationphast@gmail.com"]
+readme = "README.md"
+homepage = "https://github.com/phastboy/commando"
+repository = "https://github.com/phastboy/commando"
+keywords = ["cli", "search", "demo"]
+categories = ["command-line-utilities"]
 
 [dependencies]
 clap = { version = "4.5.24", features = ["derive"] }
