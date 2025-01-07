@@ -1,3 +1,6 @@
+mod interactive;
+
 fn main() {
-    println!("Hello, world!");
+    println!("Welcome to conventional commit CLI! 🤗");
+    interactive::run_interactive();
 }
