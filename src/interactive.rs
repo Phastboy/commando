@@ -15,12 +15,19 @@ pub fn run_interactive() {
         .interact()
         .expect("Failed to select commit type");
 
-    // prompt for scope
+    // Prompt for scope (optional)
     let scope: String = Input::with_theme(&theme)
-        .with_prompt("Enter the scope")
+        .with_prompt("Enter the scope (optional, press Enter to skip)")
+        .allow_empty(true)
         .interact_text()
         .expect("Failed to read scope");
 
-    println!("Selected commit type: {}", commit_types[commit_type]);
-    println!("scope: {scope}");
+    // Print the collected inputs
+    println!("\nConventional Commit:");
+    println!(
+        "{}({})",
+        commit_types[commit_type],
+        if scope.is_empty() { "none" } else { &scope }
+    );
 }
+
