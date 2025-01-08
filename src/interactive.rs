@@ -22,12 +22,28 @@ pub fn run_interactive() {
         .interact_text()
         .expect("Failed to read scope");
 
+    // Prompt for description (required, validate length)
+    let description: String = Input::with_theme(&theme)
+        .with_prompt("Enter the description (max 50 characters)")
+        .validate_with(|input: &String| {
+            if input.is_empty() {
+                Err("Description cannot be empty.")
+            } else if input.len() > 50 {
+                Err("Description must be 50 characters or less.")
+            } else {
+                Ok(())
+            }
+        })
+        .interact_text()
+        .expect("Failed to read description");
+
     // Print the collected inputs
     println!("\nConventional Commit:");
     println!(
-        "{}({})",
+        "{}({}): {}",
         commit_types[commit_type],
-        if scope.is_empty() { "none" } else { &scope }
+        if scope.is_empty() { "none" } else { &scope },
+        description
     );
 }
 
