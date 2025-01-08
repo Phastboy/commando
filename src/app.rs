@@ -1,22 +1,39 @@
+use crate::features::CommitType;
 use color_eyre::Result;
 use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
 use ratatui::{
-    style::Stylize,
+    layout::{Constraint, Direction, Layout},
+    prelude::Stylize,
+    style::{Color, Modifier, Style},
     text::Line,
-    widgets::{Block, Paragraph},
+    widgets::{Block, Borders, Paragraph},
     DefaultTerminal, Frame,
 };
 
 #[derive(Debug, Default)]
 pub struct App {
-    /// Is the application running?
-    running: bool,
+    running: bool,                 // app is running?
+    commit_types: Vec<CommitType>, // Store commit types
+    selected: usize,               // Index of the selected commit type
 }
 
 impl App {
-    /// Construct a new instance of [`App`].
     pub fn new() -> Self {
-        Self::default()
+        Self {
+            running: false,
+            commit_types: vec![
+                CommitType::Feat,
+                CommitType::Fix,
+                CommitType::Docs,
+                CommitType::Style,
+                CommitType::Refactor,
+                CommitType::Perf,
+                CommitType::Test,
+                CommitType::Chore,
+                CommitType::CI,
+            ],
+            selected: 0,
+        }
     }
 
     /// Run the application's main loop.
@@ -35,19 +52,51 @@ impl App {
     /// - <https://docs.rs/ratatui/latest/ratatui/widgets/index.html>
     /// - <https://github.com/ratatui/ratatui/tree/master/examples>
     fn draw(&mut self, frame: &mut Frame) {
-        let title = Line::from("Commando")
-            .bold()
-            .blue()
-            .centered();
-        let text = "Hello, Commandos!\n\n\
-            Commit made easy\n\
-            Press `Esc`, `Ctrl-C` or `q` to stop running.";
-        frame.render_widget(
-            Paragraph::new(text)
-                .block(Block::bordered().title(title))
-                .centered(),
-            frame.area(),
-        )
+        let chunks = Layout::default()
+            .direction(Direction::Vertical)
+            .constraints(
+                [
+                    Constraint::Length(4),
+                    Constraint::Min(5),
+                    Constraint::Length(3),
+                ]
+                .as_ref(),
+            )
+            .split(frame.area());
+
+        let title = Line::from("Commando").bold().blue().centered();
+        let header = Paragraph::new(format!(
+            "Select the type of your commit (use arrows to move around)\nCurrently Selected: {}",
+            self.commit_types[self.selected].as_str()
+        ))
+        .block(Block::default().borders(Borders::ALL).title(title));
+
+        let rows: Vec<Constraint> = vec![Constraint::Length(3); self.commit_types.len()];
+        let rows_layout = Layout::default()
+            .direction(Direction::Vertical)
+            .constraints(rows.as_slice())
+            .split(chunks[1]);
+
+        for (i, row) in rows_layout.iter().enumerate() {
+            let commit_type = &self.commit_types[i];
+            let style = if self.selected == i {
+                Style::default()
+                    .fg(Color::Yellow)
+                    .add_modifier(Modifier::BOLD)
+            } else {
+                Style::default()
+            };
+            let text = Paragraph::new(format!(
+                "{} - {}",
+                commit_type.as_str(),
+                commit_type.description()
+            ))
+            .style(style)
+            .block(Block::default().borders(Borders::ALL));
+            frame.render_widget(text, *row);
+        }
+
+        frame.render_widget(header, chunks[0]);
     }
 
     /// Reads the crossterm events and updates the state of [`App`].
@@ -68,6 +117,24 @@ impl App {
     /// Handles the key events and updates the state of [`App`].
     fn on_key_event(&mut self, key: KeyEvent) {
         match (key.modifiers, key.code) {
+            (_, KeyCode::Up) => {
+                self.selected = if self.selected == 0 {
+                    self.commit_types.len() - 1
+                } else {
+                    self.selected - 1
+                };
+            }
+            (_, KeyCode::Down) => {
+                self.selected = if self.selected == self.commit_types.len() - 1 {
+                    0
+                } else {
+                    self.selected + 1
+                };
+            }
+            (_, KeyCode::Enter) => {
+                println!("Selected Commit Type: {}", self.commit_types[self.selected].as_str());
+                self.quit(); // Quit after selection for now
+            }
             (_, KeyCode::Esc | KeyCode::Char('q'))
             | (KeyModifiers::CONTROL, KeyCode::Char('c') | KeyCode::Char('C')) => self.quit(),
             // Add other key handlers here.
