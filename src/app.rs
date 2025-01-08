@@ -2,8 +2,7 @@ use color_eyre::Result;
 use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyEventKind, KeyModifiers};
 use ratatui::{
     style::Stylize,
-    text::Line,
-    widgets::{Block, Paragraph},
+    widgets::{Paragraph},
     DefaultTerminal, Frame,
 };
 
@@ -35,17 +34,12 @@ impl App {
     /// - <https://docs.rs/ratatui/latest/ratatui/widgets/index.html>
     /// - <https://github.com/ratatui/ratatui/tree/master/examples>
     fn draw(&mut self, frame: &mut Frame) {
-        let title = Line::from("Commando")
+        let title = Paragraph::new("Body")
             .bold()
             .blue()
             .centered();
-        let text = "Hello, Commandos!\n\n\
-            Commit made easy\n\
-            Press `Esc`, `Ctrl-C` or `q` to stop running.";
         frame.render_widget(
-            Paragraph::new(text)
-                .block(Block::bordered().title(title))
-                .centered(),
+                title,
             frame.area(),
         )
     }
