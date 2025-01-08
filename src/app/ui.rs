@@ -1,7 +1,7 @@
 use crate::features::CommitType;
 use ratatui::{
     layout::{Constraint, Direction, Layout},
-    prelude::{Stylize, Rect}, // Import Stylize and Rect traits
+    prelude::{Rect, Stylize}, // Import Stylize and Rect traits
     style::{Color, Modifier, Style},
     text::Line,
     widgets::{Block, Borders, Paragraph},
@@ -56,7 +56,9 @@ fn draw_commit_types(frame: &mut Frame, area: Rect, app: &crate::app::App) {
             Block::default()
                 .borders(Borders::ALL)
                 .border_style(if app.selected == i {
-                    Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD | Modifier::ITALIC)
+                    Style::default()
+                        .fg(Color::Yellow)
+                        .add_modifier(Modifier::BOLD | Modifier::ITALIC)
                 } else {
                     Style::default().fg(Color::DarkGray)
                 }),
