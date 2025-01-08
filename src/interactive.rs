@@ -1,29 +1,47 @@
 use dialoguer::{Input, Select, theme::ColorfulTheme};
+use std::fs::write;
 
 pub fn run_interactive() {
-    // theme
     let theme = ColorfulTheme::default();
+    let commit_types = vec!["feat", "fix", "chore", "docs", "refactor", "test", "ci"];
 
-    // commit types
-    let commit_types = vec!["feat", "fix", "chore", "docs", "refactor", "test"];
+    // Gather inputs
+    let commit_type = select_commit_type(&commit_types, &theme);
+    let scope = prompt_scope(&theme);
+    let description = prompt_description(&theme);
 
-    // prompt for commit type
-    let commit_type = Select::with_theme(&theme)
+    // Generate commit message
+    let commit_message = generate_commit_message(&commit_types[commit_type], &scope, &description);
+
+    // Display commit message
+    println!("\nGenerated Conventional Commit:\n{}", commit_message);
+
+    // Save commit message to file
+    save_commit_message(&commit_message);
+}
+
+/// Prompt for commit type
+fn select_commit_type(commit_types: &[&str], theme: &ColorfulTheme) -> usize {
+    Select::with_theme(theme)
         .with_prompt("Select the type of change")
-        .items(&commit_types)
+        .items(commit_types)
         .default(0)
         .interact()
-        .expect("Failed to select commit type");
+        .expect("Failed to select commit type")
+}
 
-    // Prompt for scope (optional)
-    let scope: String = Input::with_theme(&theme)
+/// Prompt for scope (optional)
+fn prompt_scope(theme: &ColorfulTheme) -> String {
+    Input::with_theme(theme)
         .with_prompt("Enter the scope (optional, press Enter to skip)")
         .allow_empty(true)
         .interact_text()
-        .expect("Failed to read scope");
+        .expect("Failed to read scope")
+}
 
-    // Prompt for description (required, validate length)
-    let description: String = Input::with_theme(&theme)
+/// Prompt for description (required, validate length)
+fn prompt_description(theme: &ColorfulTheme) -> String {
+    Input::with_theme(theme)
         .with_prompt("Enter the description (max 50 characters)")
         .validate_with(|input: &String| {
             if input.is_empty() {
@@ -35,15 +53,25 @@ pub fn run_interactive() {
             }
         })
         .interact_text()
-        .expect("Failed to read description");
+        .expect("Failed to read description")
+}
 
-    // Print the collected inputs
-    println!("\nConventional Commit:");
-    println!(
-        "{}({}): {}",
-        commit_types[commit_type],
-        if scope.is_empty() { "none" } else { &scope },
-        description
-    );
+/// Generate commit message
+fn generate_commit_message(commit_type: &str, scope: &str, description: &str) -> String {
+    if scope.is_empty() {
+        format!("{}: {}", commit_type, description)
+    } else {
+        format!("{}({}): {}", commit_type, scope, description)
+    }
+}
+
+/// Save commit message to a file
+fn save_commit_message(commit_message: &str) {
+    let path = ".git/COMMIT_EDITMSG";
+    if let Err(e) = write(path, commit_message) {
+        eprintln!("Failed to save commit message to file: {}", e);
+    } else {
+        println!("\nCommit message saved to {}", path);
+    }
 }
 
