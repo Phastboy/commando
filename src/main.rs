@@ -6,12 +6,14 @@ use crossterm::{
 use std::{error::Error, io};
 use tui::{
     backend::{Backend, CrosstermBackend},
+    style::{Color, Modifier, Style},
+    text::Span,
     widgets::{Block, Borders},
     Terminal,
 };
 
 fn main() -> Result<(), Box<dyn Error>> {
-    // Set up terminal
+    // Setup terminal
     enable_raw_mode()?;
     let mut stdout = io::stdout();
     execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
@@ -40,15 +42,26 @@ fn main() -> Result<(), Box<dyn Error>> {
 fn run_app<B: Backend>(terminal: &mut Terminal<B>) -> io::Result<()> {
     loop {
         terminal.draw(|f| {
-            let block = Block::default().title("Commit CLI").borders(Borders::ALL);
-            f.render_widget(block, f.size());
+            let size = f.size();
+
+            // Create a simple block widget with a border
+            let block = Block::default()
+                .title(Span::styled(
+                    "Commando",
+                    Style::default().fg(Color::Yellow).add_modifier(Modifier::BOLD),
+                ))
+                .borders(Borders::ALL);
+            f.render_widget(block, size);
         })?;
 
+        // Exit the app when the user presses 'q'
         if let Event::Key(key) = event::read()? {
-            if key.code == KeyCode::Char('q') {
-                return Ok(());
+            match key.code {
+                KeyCode::Char('q') => return Ok(()),
+                KeyCode::Char('a') => println!("Staging files..."),
+                KeyCode::Char('c') => println!("Committing changes..."),
+                _ => {}
             }
         }
     }
 }
-
