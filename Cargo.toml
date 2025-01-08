@@ -1,16 +1,17 @@
 [package]
 name = "commando"
-version = "0.1.0"
-edition = "2021"
 description = "A CLI tool that help you write conventional commit messages interactively."
-license = "GPL-3.0"
-authors = ["phastboy stationphast@gmail.com"]
+version = "0.2.0"
+authors = ["Hammed Anuoluwapo Pelumi <stationphast@gmail.com>"]
+license = "MIT"
+edition = "2021"
 readme = "README.md"
 homepage = "https://github.com/phastboy/commando"
 repository = "https://github.com/phastboy/commando"
-keywords = ["cli", "search", "demo"]
+keywords = ["cli"]
 categories = ["command-line-utilities"]
 
 [dependencies]
 crossterm = "0.28.1"
-tui = "0.19.0"
+ratatui = "0.29.0"
+color-eyre = "0.6.3"
