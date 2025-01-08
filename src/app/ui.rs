@@ -1,9 +1,9 @@
 use crate::features::CommitType;
 use ratatui::{
     layout::{Constraint, Direction, Layout},
-    prelude::{Rect, Stylize}, // Import Stylize and Rect traits
+    prelude::{Alignment, Stylize},
     style::{Color, Modifier, Style},
-    text::Line,
+    text::Text,
     widgets::{Block, Borders, Paragraph},
     Frame,
 };
@@ -13,7 +13,7 @@ pub fn draw(frame: &mut Frame, app: &crate::app::App) {
         .direction(Direction::Vertical)
         .constraints(
             [
-                Constraint::Length(4), // Header
+                Constraint::Length(3), // Header
                 Constraint::Min(5),    // Commit Types List
                 Constraint::Length(3), // Footer
             ]
@@ -26,18 +26,17 @@ pub fn draw(frame: &mut Frame, app: &crate::app::App) {
     draw_footer(frame, chunks[2]);
 }
 
-fn draw_header(frame: &mut Frame, area: Rect, selected: &CommitType) {
-    let title = Line::from("🚀 Commando").bold().fg(Color::LightBlue);
+fn draw_header(frame: &mut Frame, area: ratatui::prelude::Rect, selected: &CommitType) {
     let header = Paragraph::new(format!(
-        "🌟 Select the type of your commit 🌟\nCurrently Selected: {}",
+        "Select the type of your commit\nCurrently Selected: {}",
         selected.as_str()
     ))
-    .block(Block::default().borders(Borders::ALL).title(title))
-    .style(Style::default().fg(Color::White).bg(Color::Black));
+    .style(Style::default().fg(Color::LightBlue).bold())
+    .alignment(Alignment::Center);
     frame.render_widget(header, area);
 }
 
-fn draw_commit_types(frame: &mut Frame, area: Rect, app: &crate::app::App) {
+fn draw_commit_types(frame: &mut Frame, area: ratatui::prelude::Rect, app: &crate::app::App) {
     let rows: Vec<Constraint> = vec![Constraint::Length(3); app.commit_types.len()];
     let rows_layout = Layout::default()
         .direction(Direction::Vertical)
@@ -46,28 +45,37 @@ fn draw_commit_types(frame: &mut Frame, area: Rect, app: &crate::app::App) {
 
     for (i, row) in rows_layout.iter().enumerate() {
         let commit_type = &app.commit_types[i];
-        let text = Paragraph::new(format!(
-            "→ {} - {}",
-            commit_type.as_str(),
-            commit_type.description()
-        ))
-        .style(Style::default().fg(Color::White))
-        .block(
-            Block::default()
-                .borders(Borders::ALL)
-                .border_style(if app.selected == i {
-                    Style::default()
-                        .fg(Color::Yellow)
-                        .add_modifier(Modifier::BOLD | Modifier::ITALIC)
-                } else {
-                    Style::default().fg(Color::DarkGray)
-                }),
-        );
+        let description = if app.selected == i {
+            Text::styled(
+                format!("{} - {}", commit_type.as_str(), commit_type.description()),
+                Style::default()
+                    .fg(Color::LightGreen)
+                    .bold()
+                    .add_modifier(Modifier::BOLD),
+            )
+        } else {
+            Text::styled(commit_type.as_str(), Style::default().fg(Color::White))
+        };
+
+        let text = Paragraph::new(description)
+            .style(Style::default().fg(Color::White))
+            .block(
+                Block::default()
+                    .borders(Borders::ALL)
+                    .border_style(if app.selected == i {
+                        Style::default()
+                            .fg(Color::Yellow)
+                            .add_modifier(Modifier::BOLD)
+                    } else {
+                        Style::default().fg(Color::DarkGray)
+                    }),
+            )
+            .alignment(Alignment::Left);
         frame.render_widget(text, *row);
     }
 }
 
-fn draw_footer(frame: &mut Frame, area: Rect) {
+fn draw_footer(frame: &mut Frame, area: ratatui::prelude::Rect) {
     let footer = Paragraph::new("↑/↓ to navigate, Enter to select, Esc to quit")
         .style(
             Style::default()
@@ -75,6 +83,6 @@ fn draw_footer(frame: &mut Frame, area: Rect) {
                 .bg(Color::Black)
                 .add_modifier(Modifier::BOLD),
         )
-        .block(Block::default().borders(Borders::ALL));
+        .alignment(Alignment::Center);
     frame.render_widget(footer, area);
 }

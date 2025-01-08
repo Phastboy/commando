@@ -1,4 +1,5 @@
 pub mod events;
+pub mod splash;
 pub mod state;
 pub mod ui;
 
