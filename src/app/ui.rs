@@ -3,7 +3,7 @@ use ratatui::{
     layout::{Constraint, Direction, Layout},
     prelude::{Alignment, Stylize},
     style::{Color, Modifier, Style},
-    text::{Text},
+    text::Text,
     widgets::{Block, Borders, Paragraph},
     Frame,
 };
@@ -48,7 +48,10 @@ fn draw_commit_types(frame: &mut Frame, area: ratatui::prelude::Rect, app: &crat
         let description = if app.selected == i {
             Text::styled(
                 format!("{} - {}", commit_type.as_str(), commit_type.description()),
-                Style::default().fg(Color::LightGreen).bold().add_modifier(Modifier::BOLD),
+                Style::default()
+                    .fg(Color::LightGreen)
+                    .bold()
+                    .add_modifier(Modifier::BOLD),
             )
         } else {
             Text::styled(commit_type.as_str(), Style::default().fg(Color::White))

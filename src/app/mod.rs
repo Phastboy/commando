@@ -1,7 +1,7 @@
 pub mod events;
+pub mod splash;
 pub mod state;
 pub mod ui;
-pub mod splash;
 
 use crate::features::CommitType;
 use color_eyre::Result;
