@@ -36,10 +36,25 @@ impl CommitType {
             CommitType::Docs => "Documentation only changes 📚",
             CommitType::Style => "Changes that do not affect the code 💄",
             CommitType::Refactor => "Code changes that neither fix bugs nor add features 🔨",
-            CommitType::Perf => "Performance improvements 🚀",
+            CommitType::Perf => "Performance improvements  🚀",
             CommitType::Test => "Adding or modifying tests ✅",
             CommitType::Chore => "Other changes that don't modify src or tests 🧹",
             CommitType::CI => "Changes related to continuous integration ⚙️",
         }
+    }
+
+    /// Returns all possible `CommitType` values.
+    pub fn all() -> Vec<Self> {
+        vec![
+            CommitType::Feat,
+            CommitType::Fix,
+            CommitType::Docs,
+            CommitType::Style,
+            CommitType::Refactor,
+            CommitType::Perf,
+            CommitType::Test,
+            CommitType::Chore,
+            CommitType::CI,
+        ]
     }
 }
