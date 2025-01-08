@@ -56,21 +56,28 @@ impl App {
             .direction(Direction::Vertical)
             .constraints(
                 [
-                    Constraint::Length(4),
-                    Constraint::Min(5),
-                    Constraint::Length(3),
+                    Constraint::Length(4), // Header
+                    Constraint::Min(5),    // Commit Types List
+                    Constraint::Length(3), // Footer
                 ]
                 .as_ref(),
             )
             .split(frame.area());
 
-        let title = Line::from("Commando").bold().blue().centered();
+        // Header
+        let title = Line::from("🚀 Commando")
+            .bold()
+            .fg(Color::LightBlue)
+            .centered();
         let header = Paragraph::new(format!(
-            "Select the type of your commit (use arrows to move around)\nCurrently Selected: {}",
+            "🌟 Select the type of your commit 🌟\nCurrently Selected: {}",
             self.commit_types[self.selected].as_str()
         ))
-        .block(Block::default().borders(Borders::ALL).title(title));
+        .block(Block::default().borders(Borders::ALL).title(title))
+        .style(Style::default().fg(Color::White).bg(Color::Black));
+        frame.render_widget(header, chunks[0]);
 
+        // Commit Types
         let rows: Vec<Constraint> = vec![Constraint::Length(3); self.commit_types.len()];
         let rows_layout = Layout::default()
             .direction(Direction::Vertical)
@@ -79,24 +86,36 @@ impl App {
 
         for (i, row) in rows_layout.iter().enumerate() {
             let commit_type = &self.commit_types[i];
-            let style = if self.selected == i {
-                Style::default()
-                    .fg(Color::Yellow)
-                    .add_modifier(Modifier::BOLD)
-            } else {
-                Style::default()
-            };
             let text = Paragraph::new(format!(
-                "{} - {}",
+                "→ {} - {}",
                 commit_type.as_str(),
                 commit_type.description()
             ))
-            .style(style)
-            .block(Block::default().borders(Borders::ALL));
+            .style(Style::default().fg(Color::White))
+            .block(
+                Block::default()
+                    .borders(Borders::ALL)
+                    .border_style(if self.selected == i {
+                        Style::default()
+                            .fg(Color::Yellow)
+                            .add_modifier(Modifier::BOLD)
+                    } else {
+                        Style::default().fg(Color::Cyan)
+                    }),
+            );
             frame.render_widget(text, *row);
         }
 
-        frame.render_widget(header, chunks[0]);
+        // Footer
+        let footer = Paragraph::new("↑/↓ to navigate, Enter to select, Esc to quit")
+            .style(
+                Style::default()
+                    .fg(Color::LightGreen)
+                    .bg(Color::Black)
+                    .add_modifier(Modifier::BOLD),
+            )
+            .block(Block::default().borders(Borders::ALL));
+        frame.render_widget(footer, chunks[2]);
     }
 
     /// Reads the crossterm events and updates the state of [`App`].
@@ -132,7 +151,10 @@ impl App {
                 };
             }
             (_, KeyCode::Enter) => {
-                println!("Selected Commit Type: {}", self.commit_types[self.selected].as_str());
+                println!(
+                    "Selected Commit Type: {}",
+                    self.commit_types[self.selected].as_str()
+                );
                 self.quit(); // Quit after selection for now
             }
             (_, KeyCode::Esc | KeyCode::Char('q'))
