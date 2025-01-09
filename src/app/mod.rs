@@ -13,6 +13,12 @@ pub struct App {
     pub active_handler: Box<dyn Handleable>,
 }
 
+impl Default for App {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl App {
     pub fn new() -> Self {
         Self {

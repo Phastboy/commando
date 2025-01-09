@@ -12,7 +12,8 @@ pub struct UIComponent<'a> {
     pub title: Option<&'a str>,
     pub bordered: bool,
 }
-pub fn draw_ui<'a>(frame: &mut Frame, area: Rect, components: Option<&[UIComponent<'a>]>) {
+
+pub fn draw_ui(frame: &mut Frame, area: Rect, components: Option<&[UIComponent<'_>]>) {
     if let Some(components) = components {
         let constraints: Vec<Constraint> = components.iter().map(|c| c.constraint).collect();
 
