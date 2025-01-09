@@ -7,7 +7,7 @@ pub fn handle(app: &mut App) -> Result<()> {
         Event::Key(key) if key.kind == KeyEventKind::Press => {
             println!("Processing key event: {:?}", key.code);
             app.on_key_event(key)
-        },
+        }
         Event::Mouse(_) => {}
         Event::Resize(_, _) => {}
         _ => {}

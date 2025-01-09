@@ -1,5 +1,5 @@
-use crossterm::event::{KeyCode, KeyEvent};
 use crate::app::traits::Handleable;
+use crossterm::event::{KeyCode, KeyEvent};
 use std::fmt;
 
 #[derive(Default)]
@@ -18,7 +18,7 @@ impl Handleable for WelcomeScreenHandler {
         match key.code {
             KeyCode::Char('q') => {
                 println!("Quit command received from Welcome Screen!");
-            },
+            }
             _ => println!("Key {:?} pressed in Welcome Screen", key.code),
         }
     }

@@ -1,8 +1,8 @@
 pub mod events;
 pub mod traits;
 
-use crate::features::welcome_screen::events::WelcomeScreenHandler;
 use crate::app::traits::Handleable;
+use crate::features::welcome_screen::events::WelcomeScreenHandler;
 use color_eyre::Result;
 use crossterm::event::{KeyCode, KeyEvent};
 use ratatui::DefaultTerminal;
@@ -41,7 +41,7 @@ impl App {
             KeyCode::Char('q') => {
                 println!("Quit event received. Exiting...");
                 self.quit();
-            },
+            }
             _ => {}
         }
     }

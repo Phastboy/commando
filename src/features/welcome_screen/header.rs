@@ -1,6 +1,6 @@
 use ratatui::prelude::*;
+use ratatui::style::{Color, Style};
 use ratatui::widgets::{Block, Borders, Paragraph};
-use ratatui::style::{Style, Color};
 
 /// Draws the header for the welcome screen with vibrant colors.
 pub fn draw_welcome_header(frame: &mut Frame, area: Rect) {
@@ -17,4 +17,3 @@ pub fn draw_welcome_header(frame: &mut Frame, area: Rect) {
 
     frame.render_widget(header, area);
 }
-

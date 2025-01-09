@@ -1,8 +1,8 @@
 pub use app::App;
 
 pub mod app;
-pub mod utils;
 pub mod features;
+pub mod utils;
 
 fn main() -> color_eyre::Result<()> {
     color_eyre::install()?;

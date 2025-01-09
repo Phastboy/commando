@@ -1,6 +1,6 @@
 use ratatui::prelude::*;
-use ratatui::widgets::{Block, Paragraph, Borders};
-use ratatui::style::{Style, Color};
+use ratatui::style::{Color, Style};
+use ratatui::widgets::{Block, Borders, Paragraph};
 
 /// Draws the content for the welcome screen with vibrant colors.
 pub fn draw_welcome_content(frame: &mut Frame, area: Rect) {

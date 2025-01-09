@@ -1,10 +1,8 @@
-use ratatui::prelude::Frame;
-use ratatui::layout::{Layout, Constraint, Direction, Rect};
 use crate::features::welcome_screen::{
-    header::draw_welcome_header,
-    content::draw_welcome_content,
-    footer::draw_welcome_footer,
+    content::draw_welcome_content, footer::draw_welcome_footer, header::draw_welcome_header,
 };
+use ratatui::layout::{Constraint, Direction, Layout, Rect};
+use ratatui::prelude::Frame;
 
 /// Draws the welcome screen UI.
 pub fn draw_welcome_ui(frame: &mut Frame, area: Rect) {
