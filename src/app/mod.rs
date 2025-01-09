@@ -1,24 +1,31 @@
 pub mod events;
+pub mod traits;
+
+use crate::features::welcome_screen::events::WelcomeScreenHandler;
+use crate::app::traits::Handleable;
 use color_eyre::Result;
 use crossterm::event::{KeyCode, KeyEvent};
 use ratatui::DefaultTerminal;
-use crate::features::welcome_screen::ui::draw_welcome_ui;
 
 #[derive(Debug)]
 pub struct App {
     pub running: bool,
+    pub active_handler: Box<dyn Handleable>,
 }
 
 impl App {
     pub fn new() -> Self {
-        Self { running: false }
+        Self {
+            running: false,
+            active_handler: Box::new(WelcomeScreenHandler::default()),
+        }
     }
 
     pub fn run(&mut self, mut terminal: DefaultTerminal) -> Result<()> {
         self.running = true;
         while self.running {
             terminal.draw(|frame| {
-                draw_welcome_ui(frame, frame.area());
+                crate::features::welcome_screen::ui::draw_welcome_ui(frame, frame.area());
             })?;
             events::handle(self)?;
         }
@@ -31,7 +38,10 @@ impl App {
 
     pub fn on_key_event(&mut self, key: KeyEvent) {
         match key.code {
-            KeyCode::Char('q') => self.quit(),
+            KeyCode::Char('q') => {
+                println!("Quit event received. Exiting...");
+                self.quit();
+            },
             _ => {}
         }
     }
