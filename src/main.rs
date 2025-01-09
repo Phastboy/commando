@@ -3,7 +3,6 @@ pub use app::App;
 pub mod app;
 pub mod utils;
 
-/// Entry point.
 fn main() -> color_eyre::Result<()> {
     color_eyre::install()?;
     let terminal = ratatui::init();
