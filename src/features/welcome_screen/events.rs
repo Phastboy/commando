@@ -6,11 +6,10 @@ pub struct WelcomeScreenHandler;
 
 impl Handleable for WelcomeScreenHandler {
     fn handle_key_event(&mut self, key: KeyEvent) {
-        match key.code {
-            KeyCode::Char('q') => {
-                println!("Quit command received from Welcome Screen!");
-            }
-            _ => println!("Key {:?} pressed in Welcome Screen", key.code),
+        if let KeyCode::Char('q') = key.code {
+            println!("Quit command received from Welcome Screen!");
+        } else {
+            println!("Key {:?} pressed in Welcome Screen", key.code);
         }
     }
 }

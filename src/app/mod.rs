@@ -23,7 +23,7 @@ impl App {
     pub fn new() -> Self {
         Self {
             running: false,
-            active_handler: Box::new(WelcomeScreenHandler::default()),
+            active_handler: Box::new(WelcomeScreenHandler {}),
         }
     }
 
@@ -43,12 +43,9 @@ impl App {
     }
 
     pub fn on_key_event(&mut self, key: KeyEvent) {
-        match key.code {
-            KeyCode::Char('q') => {
-                println!("Quit event received. Exiting...");
-                self.quit();
-            }
-            _ => {}
+        if let KeyCode::Char('q') = key.code {
+            println!("Quit event received. Exiting...");
+            self.quit();
         }
     }
 }
