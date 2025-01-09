@@ -5,7 +5,7 @@ use crossterm::event::{KeyCode, KeyEvent};
 use ratatui::{
     layout::Constraint,
     prelude::{Alignment, Rect},
-    style::{Color, Style},
+    style::{Color, Style, Modifier},
     widgets::{Block, Borders, Paragraph},
     Frame,
     DefaultTerminal,
@@ -51,10 +51,12 @@ impl App {
 
 // Define the draw_header, draw_main_section, and draw_footer functions here
 fn draw_header(frame: &mut Frame, area: Rect) {
-    frame.render_widget(
-        Block::default().title("Header").borders(Borders::ALL),
-        area,
-    );
+let header = Paragraph::new(format!(
+        "HEADER"
+    ))
+    .style(Style::default().fg(Color::LightBlue))
+    .alignment(Alignment::Center);
+    frame.render_widget(header, area);
 }
 
 fn draw_main_section(frame: &mut Frame, area: Rect) {
@@ -68,8 +70,13 @@ fn draw_main_section(frame: &mut Frame, area: Rect) {
 }
 
 fn draw_footer(frame: &mut Frame, area: Rect) {
-    frame.render_widget(
-        Block::default().title("Footer").borders(Borders::ALL),
-        area,
-    );
+    let footer = Paragraph::new("↑/↓ to navigate, Enter to select, Esc to quit")
+        .style(
+            Style::default()
+                .fg(Color::LightGreen)
+                .bg(Color::Black)
+                .add_modifier(Modifier::BOLD),
+        )
+        .alignment(Alignment::Center);
+    frame.render_widget(footer, area);
 }
