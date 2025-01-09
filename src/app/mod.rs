@@ -1,10 +1,8 @@
 use crate::events;
-use crate::utils::ui::{draw_ui};
+use crate::utils::ui::draw_ui;
 use color_eyre::Result;
 use crossterm::event::{KeyCode, KeyEvent};
-use ratatui::{
-    DefaultTerminal,
-};
+use ratatui::DefaultTerminal;
 
 #[derive(Debug)]
 pub struct App {
