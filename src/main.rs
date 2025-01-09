@@ -2,7 +2,7 @@ pub use app::App;
 
 pub mod app;
 pub mod events;
-pub mod ui;
+pub mod utils;
 
 fn main() -> color_eyre::Result<()> {
     color_eyre::install()?;
