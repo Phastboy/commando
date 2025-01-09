@@ -1,4 +1,4 @@
-use crate::events;
+pub mod events;
 use crate::utils::ui::draw_ui;
 use color_eyre::Result;
 use crossterm::event::{KeyCode, KeyEvent};
@@ -18,7 +18,7 @@ impl App {
         self.running = true;
         while self.running {
             terminal.draw(|frame| {
-                draw_ui(frame, None);
+                draw_ui(frame, frame.area(), None);
             })?;
             events::handle(self)?;
         }
