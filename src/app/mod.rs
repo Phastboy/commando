@@ -1,38 +1,38 @@
-pub mod events;
-pub mod splash;
-pub mod state;
-pub mod ui;
-
-use crate::features::CommitType;
+use crate::events;
+use crate::utils::ui::draw_ui;
 use color_eyre::Result;
+use crossterm::event::{KeyCode, KeyEvent};
 use ratatui::DefaultTerminal;
 
 #[derive(Debug)]
 pub struct App {
     pub running: bool,
-    pub commit_types: Vec<CommitType>,
-    pub selected: usize,
 }
 
 impl App {
     pub fn new() -> Self {
-        Self {
-            running: false,
-            commit_types: CommitType::all(),
-            selected: 0,
-        }
+        Self { running: false }
     }
 
-    pub fn run(mut self, mut terminal: DefaultTerminal) -> Result<()> {
+    pub fn run(&mut self, mut terminal: DefaultTerminal) -> Result<()> {
         self.running = true;
         while self.running {
-            terminal.draw(|frame| ui::draw(frame, &self))?;
-            events::handle(&mut self)?;
+            terminal.draw(|frame| {
+                draw_ui(frame, None);
+            })?;
+            events::handle(self)?;
         }
         Ok(())
     }
 
     pub fn quit(&mut self) {
         self.running = false;
+    }
+
+    pub fn on_key_event(&mut self, key: KeyEvent) {
+        match key.code {
+            KeyCode::Char('q') => self.quit(),
+            _ => {}
+        }
     }
 }
