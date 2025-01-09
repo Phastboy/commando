@@ -1,8 +1,8 @@
 pub mod events;
-use crate::utils::ui::draw_ui;
 use color_eyre::Result;
 use crossterm::event::{KeyCode, KeyEvent};
 use ratatui::DefaultTerminal;
+use crate::features::welcome_screen::ui::draw_welcome_ui;
 
 #[derive(Debug)]
 pub struct App {
@@ -18,7 +18,7 @@ impl App {
         self.running = true;
         while self.running {
             terminal.draw(|frame| {
-                draw_ui(frame, frame.area(), None);
+                draw_welcome_ui(frame, frame.area());
             })?;
             events::handle(self)?;
         }
