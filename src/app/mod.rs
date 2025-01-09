@@ -1,4 +1,4 @@
-use crate::events;
+pub mod events;
 use crate::utils::ui::draw_ui;
 use color_eyre::Result;
 use crossterm::event::{KeyCode, KeyEvent};

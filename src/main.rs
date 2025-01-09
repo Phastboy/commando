@@ -1,7 +1,6 @@
 pub use app::App;
 
 pub mod app;
-pub mod events;
 pub mod utils;
 
 fn main() -> color_eyre::Result<()> {
