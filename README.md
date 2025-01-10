@@ -9,6 +9,7 @@ A CLI tool that help you write conventional commit messages interactively.
 - concise description.
 - detailed description.
 - preview and confirm message.
+- select commit type from predefined types.
 
 ## License
 
