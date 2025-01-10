@@ -1,6 +1,6 @@
-use crossterm::event::KeyEvent;
+use crossterm::event::Event;
 use std::fmt::Debug;
 
 pub trait Handleable: Debug {
-    fn handle_key_event(&mut self, key: KeyEvent);
+    fn handle_event(&mut self, event: &Event);
 }
