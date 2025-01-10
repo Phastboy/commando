@@ -105,6 +105,10 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
       - name: Install cargo-release
         run: cargo install cargo-release
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@github.com"
       - name: Run cargo release
         env:
           CARGO_TERM_COLOR: always
