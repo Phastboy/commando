@@ -3,6 +3,7 @@ pub mod traits;
 
 use crate::app::traits::Handleable;
 use crate::features::welcome_screen::events::WelcomeScreenHandler;
+use crate::features::commit_type_selection::events::CommitTypeSelectionHandler;
 use color_eyre::Result;
 use crossterm::event::Event;
 use crossterm::event::{KeyCode};
@@ -50,6 +51,9 @@ impl App {
             if let KeyCode::Char('q') = key.code {
                 println!("Quit event received. Exiting...");
                 self.quit();
+            } else if let KeyCode::Char('c') = key.code {
+                println!("Switching to Commit Type Selection Screen...");
+                self.active_handler = Box::new(CommitTypeSelectionHandler {});
             }
         }
     }
