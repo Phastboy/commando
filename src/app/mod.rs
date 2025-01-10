@@ -4,7 +4,8 @@ pub mod traits;
 use crate::app::traits::Handleable;
 use crate::features::welcome_screen::events::WelcomeScreenHandler;
 use color_eyre::Result;
-use crossterm::event::{KeyCode, KeyEvent};
+use crossterm::event::Event;
+use crossterm::event::{KeyCode};
 use ratatui::DefaultTerminal;
 
 #[derive(Debug)]
@@ -39,13 +40,17 @@ impl App {
     }
 
     pub fn quit(&mut self) {
+        println!("Application is quitting...");
         self.running = false;
     }
 
-    pub fn on_key_event(&mut self, key: KeyEvent) {
-        if let KeyCode::Char('q') = key.code {
-            println!("Quit event received. Exiting...");
-            self.quit();
+    pub fn on_event(&mut self, event: Event) {
+        self.active_handler.handle_event(&event);
+        if let Event::Key(key) = event {
+            if let KeyCode::Char('q') = key.code {
+                println!("Quit event received. Exiting...");
+                self.quit();
+            }
         }
     }
 }
