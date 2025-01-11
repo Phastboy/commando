@@ -1,13 +1,17 @@
-pub use app::App;
+mod features;
+/// The main module for the Commando application.
+mod lib;
+mod screen_manager;
 
-pub mod app;
-pub mod features;
-pub mod utils;
+use features::welcome_screen::WelcomeScreen;
+use screen_manager::ScreenManager;
 
-fn main() -> color_eyre::Result<()> {
-    color_eyre::install()?;
-    let terminal = ratatui::init();
-    let result = App::new().run(terminal);
-    ratatui::restore();
-    result
+/// The entry point of the application.
+fn main() {
+    let start_screen = Box::new(WelcomeScreen::new());
+    let mut manager = ScreenManager::new(start_screen);
+
+    println!("Starting Commando...");
+    manager.run();
+    println!("Goodbye!");
 }
