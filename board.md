@@ -3,10 +3,10 @@ classDiagram
 direction TB
 
 class Application {
-    +run(interface: UI, componentManager: ComponentManager): Result
+    +run(interface: UI, renderUI: UIRenderer): Result
 }
 
-class ComponentManager {
+class UIRenderer {
     +addComponent(component: UIComponent)
     +removeComponent(index: int)
     +render(context: RenderingContext)
@@ -16,16 +16,16 @@ class ComponentManager {
 
 class ScreenManager {
     +transitionTo(screen: Screen)
-    +render(interface: UI, componentManager: ComponentManager): Result
-    +handleEvent(event: Event, componentManager: ComponentManager): Screen
+    +render(interface: UI, renderUI: UIRenderer): Result
+    +handleEvent(event: Event, renderUI: UIRenderer): Screen
     -current: Screen
     -state: State
 }
 
 class Screen {
-    +setupUI(): ComponentManager
-    +render(interface: UI, componentManager: ComponentManager): Result
-    +handleEvent(event: Event, state: State, componentManager: ComponentManager): Screen
+    +setupUI(): UIRenderer
+    +render(interface: UI, renderUI: UIRenderer): Result
+    +handleEvent(event: Event, state: State, renderUI: UIRenderer): Screen
 }
 
 class UIComponent {
@@ -71,9 +71,9 @@ class RenderingContext {
 
 Application --> ScreenManager
 ScreenManager --> Screen
-Screen --> ComponentManager
+Screen --> UIRenderer
 Screen --> State
-ComponentManager --> UIComponent
+UIRenderer --> UIComponent
 UIComponent <|-- TextBlock
 State <|-- InMemoryState
 UIComponent --> RenderingContext
