@@ -76,6 +76,8 @@ src
   - Each screen implements the `Screen` trait.
   - Manages transitions via `ScreenManager`.
 
+Refer to [Application Structure Diagram](./board.md) for more details.
+
 ---
 
 ### 4. `state/`

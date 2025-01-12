@@ -1,5 +1,7 @@
 # Application Structure
 
+This document contains the class diagram that represents the application's structure.
+
 ```mermaid
 ---
 title: Application Structure
