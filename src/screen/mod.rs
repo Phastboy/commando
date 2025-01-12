@@ -1,3 +1,8 @@
+//! The `screen` module contains traits and implementations for individual screens.
+
+pub mod manager;
+pub mod my_initial_screen;
+
 use crate::state::State;
 use crate::ui::render::UIRenderer;
 use crossterm::event::Event;
