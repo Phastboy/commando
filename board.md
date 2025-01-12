@@ -1,45 +1,36 @@
 ``` mermaid
 classDiagram
-
 direction TB
 
 class Application {
-    +run(terminal: Terminal, uiRenderer: UIRenderer): Result
+    +run(interface: UI, componentManager: ComponentManager): Result
 }
 
 class ComponentManager {
     +addComponent(component: UIComponent)
     +removeComponent(index: int)
-    +render(frame: Frame)
+    +render(context: RenderingContext)
     +handleEvent(event: Event)
     -components: List<UIComponent>
 }
 
 class ScreenManager {
     +transitionTo(screen: Screen)
-    +render(terminal: Terminal, uiRenderer: UIRenderer): Result
-    +handleEvent(event: Event, uiRenderer: UIRenderer): Screen
+    +render(interface: UI, componentManager: ComponentManager): Result
+    +handleEvent(event: Event, componentManager: ComponentManager): Screen
     -current: Screen
     -state: State
 }
 
 class Screen {
-    +setupUI(): UIRenderer
-    +render(terminal: Terminal, uiRenderer: UIRenderer): Result
-    +handleEvent(event: Event, state: State, uiRenderer: UIRenderer): Screen
-}
-
-class UIRenderer {
-    +addComponent(component: UIComponent)
-    +removeComponent(index: int)
-    +render(frame: Frame)
-    +handleEvent(event: Event)
-    -components: List<UIComponent>
+    +setupUI(): ComponentManager
+    +render(interface: UI, componentManager: ComponentManager): Result
+    +handleEvent(event: Event, state: State, componentManager: ComponentManager): Screen
 }
 
 class UIComponent {
     <<interface>>
-    +render(frame: Frame)
+    +render(context: RenderingContext)
     +handleEvent(event: Event): Result
 }
 
@@ -47,7 +38,7 @@ class TextBlock {
     +new(text: String, area: Rect, active: bool)
     +setActive(active: bool)
     +isActive(): bool
-    +render(frame: Frame)
+    +render(context: RenderingContext)
     +handleEvent(event: Event): Result
     -text: String
     -area: Rect
@@ -73,11 +64,17 @@ class InMemoryState {
     -active: bool
 }
 
+class RenderingContext {
+    <<description>>
+    The context used to draw or display UI elements and manage their layout.
+}
+
 Application --> ScreenManager
 ScreenManager --> Screen
-Screen --> UIRenderer
+Screen --> ComponentManager
 Screen --> State
-UIRenderer --> UIComponent
+ComponentManager --> UIComponent
 UIComponent <|-- TextBlock
 State <|-- InMemoryState
+UIComponent --> RenderingContext
 ```
