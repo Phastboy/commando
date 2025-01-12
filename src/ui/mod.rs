@@ -1,3 +1,7 @@
+//! The `ui` module defines traits and utilities for rendering the user interface.
+
+pub mod render;
+
 use crossterm::event::Event;
 use ratatui::Frame;
 use std::fmt::Debug;
