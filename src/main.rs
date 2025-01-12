@@ -1,13 +1,28 @@
-pub use app::App;
+//! The entry point for the application.
 
 pub mod app;
-pub mod features;
-pub mod utils;
+pub mod components;
+pub mod screen;
+pub mod state;
+pub mod ui;
 
-fn main() -> color_eyre::Result<()> {
+use crate::screen::my_initial_screen::MyInitialScreen;
+use crate::screen::Screen;
+use crate::state::in_memory::InMemoryState;
+use app::App;
+use color_eyre::eyre::Result;
+
+/// Starts the application.
+fn main() -> Result<()> {
     color_eyre::install()?;
     let terminal = ratatui::init();
-    let result = App::new().run(terminal);
+
+    let mut start_screen = Box::new(MyInitialScreen::new());
+    let state = InMemoryState::default();
+    let render_ui = start_screen.setup_ui();
+
+    App::new(start_screen, state).run(terminal, render_ui)?;
+
     ratatui::restore();
-    result
+    Ok(())
 }

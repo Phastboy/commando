@@ -1,0 +1,4 @@
+[release]
+push-remote = "origin"
+allow-branch = ["main"]
+
