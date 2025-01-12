@@ -1,3 +1,8 @@
+//! The `state` module defines traits and implementations for managing application state.
+
+pub mod in_memory;
+pub mod manager;
+
 use std::fmt::Debug;
 
 /// Represents a generic state management system.
